@@ -1,0 +1,40 @@
+/* standard opcodes */
+unsigned char OP_SPECIAL = 0x00;
+unsigned int OP_SET = 0x01;
+const unsigned char OP_ADD = 0x02;
+const unsigned char OP_SUB = 0x03;
+const unsigned char OP_MUL = 0x04;
+const unsigned char OP_MLI = 0x05;
+const unsigned char OP_DIV = 0x06;
+const unsigned char OP_DVI = 0x07;
+const unsigned char OP_MOD = 0x08;
+const unsigned char OP_MDI = 0x09;
+const unsigned char OP_AND = 0x0A;
+const unsigned char OP_BOR = 0x0B;
+const unsigned char OP_XOR = 0x0C;
+const unsigned char OP_SHR = 0x0D;
+const unsigned char OP_ASR = 0x0E;
+const unsigned char OP_SHL = 0x0F;
+const unsigned char OP_IFB = 0x10;
+const unsigned char OP_IFC = 0x11;
+const unsigned char OP_IFE = 0x12;
+const unsigned char OP_IFN = 0x13;
+const unsigned char OP_IFG = 0x14;
+const unsigned char OP_IFA = 0x15;
+const unsigned char OP_IFL = 0x16;
+const unsigned char OP_IFU = 0x17;
+const unsigned char OP_ADX = 0x1A;
+const unsigned char OP_SBX = 0x1B;
+const unsigned char OP_STI = 0x1E;
+const unsigned char OP_STD = 0x1F;
+
+/* special opcodes */
+const unsigned char OP_JSR = 0x01;
+const unsigned char OP_INT = 0x08;
+const unsigned char OP_IAG = 0x09;
+const unsigned char OP_IAS = 0x0A;
+const unsigned char OP_RFI = 0x0B;
+const unsigned char OP_IAQ = 0x0C;
+const unsigned char OP_HWN = 0x10;
+const unsigned char OP_HWQ = 0x11;
+const unsigned char OP_HWI = 0x12;
