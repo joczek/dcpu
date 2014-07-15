@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <ncurses.h>
 #include "instructions.h"
 #include "opcodes.h"
 #include "queue.h"
@@ -26,11 +27,11 @@ unsigned short mem[0x10000];
 
 unsigned short literal_holder;
 
-int cycles_total;
-int cycles;
-int running;
+int cycles_total = 0;
+int cycles = 0;
+int running = 1;
 struct queue *interrupts;
-int interrupt_queueing;
+int interrupt_queueing = 0;
 
 void init_registers(void)
 {
@@ -41,23 +42,35 @@ void init_registers(void)
 
 void display_registers(void)
 {
-	printf("     hex        dec\n");
-	printf("A:  0x%04X      %d\n", *A, *A);
-	printf("B:  0x%04X      %d\n", *B, *B);
-	printf("C:  0x%04X      %d\n", *C, *C);
-	printf("X:  0x%04X      %d\n", *X, *X);
-	printf("Y:  0x%04X      %d\n", *Y, *Y);
-	printf("Z:  0x%04X      %d\n", *Z, *Z);
-	printf("I:  0x%04X      %d\n", *I, *I);
-	printf("J:  0x%04X      %d\n", *J, *J);
-	printf("SP: 0x%04X      %d\n", *SP, *SP);
-	printf("PC: 0x%04X      %d\n", *PC, *PC);
-	printf("EX: 0x%04X      %d\n", *EX, *EX);
+	mvprintw(0, 0, "Register Contents\n"
+	         "-----------------\n");
+	printw("     hex        dec\n");
+	printw("A:  0x%04X      %d\n", *A, *A);
+	printw("B:  0x%04X      %d\n", *B, *B);
+	printw("C:  0x%04X      %d\n", *C, *C);
+	printw("X:  0x%04X      %d\n", *X, *X);
+	printw("Y:  0x%04X      %d\n", *Y, *Y);
+	printw("Z:  0x%04X      %d\n", *Z, *Z);
+	printw("I:  0x%04X      %d\n", *I, *I);
+	printw("J:  0x%04X      %d\n", *J, *J);
+	printw("SP: 0x%04X      %d\n", *SP, *SP);
+	printw("PC: 0x%04X      %d\n", *PC, *PC);
+	printw("EX: 0x%04X      %d\n", *EX, *EX);
+	refresh();
 }
 
-void load_unstructions()
+void init_screen()
 {
-	mem[0x0000] = 0x0022;
+	initscr();
+	cbreak();
+}
+
+
+void load_instructions()
+{
+	mem[0x0000] = 0x9001; // set A to 3
+	mem[0x0001] = 0x9421; // set B to 4
+	mem[0x0002] = 0x0402; // add b to A
 }
 
 int main()
@@ -67,11 +80,12 @@ int main()
 	unsigned char opcode, a, b;
 
 	interrupts = make_queue();
-	interrupt_queueing = 0;
 	init_registers();
-	running = 1;
-	cycles_total = 0;
 
+	load_instructions();
+
+	init_screen();
+	
 	while (running) {
 		cycles = 0;
 		display_registers();
@@ -99,8 +113,11 @@ int main()
 		else if (b == OP_HWQ) { }
 		else if (b == OP_HWI) { } 
 	
-		printf("%d\n", running);
+		//printf("%d\n", running);
+		getch();
 	}
+
+	endwin();
 	return 0;
 }
 
@@ -129,7 +146,7 @@ void RFI(unsigned short *a)
 
 void IAQ(unsigned short *a)
 {
-	interrupt_queuing = *a;
+	interrupt_queueing = *a;
 }
 
 void HWN(unsigned short *a)
